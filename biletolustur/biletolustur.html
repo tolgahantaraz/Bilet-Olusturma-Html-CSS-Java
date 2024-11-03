@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset=utf-8 />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1254" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TR KESFET | Bilet Oluşturma</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            /*background-color: #f0f4f7;*/
+            background: url('bg1.jpg');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 80px rgba(0, 0, 0, 0.1);
+            width: 40%;
+        }
+
+        @media (max-width:800px) { 
+        .container {         
+        width: 90%;     
+        } }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+        }
+
+        h1 i {
+            margin-right: 10px;
+            color: #2575fc;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
+
+        form input {
+            width: 95%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            font-size: 14px;
+        }
+
+        form input:hover {
+            border: 2px solid #f0932b;
+        }
+
+        p {
+            color: #535c68;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        p i {
+            margin-right: 8px;
+            color: #2575fc;
+        }
+
+        .half-width {
+            grid-column: span 1;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        form button {
+            grid-column: span 2;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        form button:hover {
+            background: linear-gradient(45deg, #9032e5, #2575fc);
+        }
+
+        .ticket-container {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            color: #2c3e50;
+            border-radius: 12px;
+            padding: 20px 20px 20px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .biletheader {
+            background: linear-gradient(45deg, #9333ea, #2575fc);
+            color: white;
+            height: 80px;
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .biletheader h2 {
+            margin: 0;
+            font-size: 24px;
+            text-transform: capitalize;
+        }
+
+        .ticket-content {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ticket-info {
+            width: 45%;
+        }
+
+        .ticket-info div {
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ticket-info div span {
+            font-weight: 500;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .qrkapsayici {
+            /*background-color: #f4f4f4;*/
+            padding: 10px 20px;
+            border-top: 3px dotted #95a5a6;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .qrkod {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+        }
+
+        .qrkodicerik {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .ticket-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .ticket-actions button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .ticket-actions button:hover {
+            background-color: #2ecc71;
+        }
+
+        .ticket-actions .create-button {
+            background-color: #fff;
+            border: 1px dotted black;
+            color: #9032e5;
+            padding: 0 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .ticket-actions .create-button:hover {
+            background-color: #9032e5;
+            color: #fff;
+        }
+
+        .ticket-actions .download-button {
+            background-color: #9032e5;
+            padding: 10px 30px;
+        }
+
+        .ticket-actions .download-button:hover {
+            background-color: #6ab04c;
+            color: #fff;
+        }
+
+        .powered-by h3 {
+            color: #fff;
+            padding: 95px 0 0 0;
+            font-size: 13px;
+        }
+
+        .powered-by a {
+            color: #e67e22;
+            text-decoration: none;
+        }
+
+        .powered-by a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+        #baslik{
+            color: #7f8c8d;
+            font-weight: 100;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="formContainer">
+        <h1><i class="fas fa-ticket-alt"></i>Bilet Oluştur</h1>
+
+        <form id="ticketForm">
+            <div class="input-adi">
+                <p><i class="fas fa-calendar-alt"></i>Etkinlik Adı</p>
+                <input type="text" id="eventName" placeholder="Etkinlik Adı" class="half-width" required="required">
+            </div>
+            <div class="input-adi">
+                <p><i class="fas fa-calendar-day"></i>Tarih</p>
+                <input type="date" id="eventDate" class="half-width" required>
+            </div>
+            <div class="input-adi">
+                <p><i class="fas fa-clock"></i>Saat</p>
+                <input type="time" id="eventTime" class="half-width" required>
+            </div>
+            <div class="input-adi">
+                <p><i class="fas fa-map-marker-alt"></i>Konum</p>
+                <input type="text" id="eventLocation" placeholder="Konum" class="half-width" required>
+            </div>
+            <div class="input-adi">
+                <p><i class="fas fa-user"></i>Bilet Sahibi</p>
+                <input type="text" id="ticketOwner" placeholder="Bilet Sahibi" class="half-width" required pattern="[A-Za-zÇçĞğİıÖöŞşÜü\s]+" title="Sadece harfler ve boşluklar girilebilir">
+            </div>
+            <div class="input-adi">
+                <p><i class="fas fa-id-card"></i>Yolcu Kimlik Bilgileri</p>
+                <input type="text" id="tcNo" placeholder="TC Kimlik No" class="half-width" maxlength="11" pattern="\d{11}" required title="T.C. Kimlik Numarası 11 haneli olmalıdır.">
+            </div>
+            <button type="button" onclick="generateTicket()">Bileti Oluştur</button>
+        </form>
+    </div>
+
+    <div id="ticketContainer" class="ticket-container">
+        <div class="biletheader">
+            <h2 id="ticketTitle">Etkinlik Adı</h2>
+            <span id="ticketDate">Tarih</span>
+        </div>
+        <div class="ticket-content">
+            <div class="ticket-info">
+                <div><span id="baslik">Bilet Sahibi</span> <span id="ticketOwnerName"></span></div>
+                <br>
+                <div><span id="baslik">TC Kimlik No</span> <span id="ticketTcNo"></span></div>
+            </div>
+            <div class="ticket-info">
+                <div><span id="baslik">Kalkış Yeri</span> <span id="ticketLocation"></span></div>
+                <br>
+                <div><span id="baslik">Kalkış Saati</span> <span id="ticketTime"></span></div>
+            </div>
+        </div>
+        <div class="qrkapsayici">
+            <div id="qrcode" class="qrkod"></div>
+            <p class="qrkodicerik">Bu bilet devredilemez ve girişte gösterilmelidir !</p>
+        </div>
+        <div class="ticket-actions">
+            <button id="btn-download" class="download-button" onclick="downloadTicket()">Bileti İndir</button>
+            <button id="btn-yenidenolustur" class="create-button" onclick="resetForm()">Yeniden Oluştur</button>
+        </div>
+    </div>
+    <div class="powered-by">
+        <h3>Powered by <a href="https://www.siezy.com"> Siezy </a> Digital Media Agency</h3>
+    </div>
+    <script>
+        function generateTicket() {
+    const eventName = document.getElementById("eventName").value;
+    const eventDate = document.getElementById("eventDate").value;
+    const eventTime = document.getElementById("eventTime").value;
+    const eventLocation = document.getElementById("eventLocation").value;
+    
+    // Bilet sahibini al, Türkçe büyük İ'yi ve boşlukları işlemek için düzenle
+    const ticketOwner = document.getElementById("ticketOwner").value;
+    
+    // Eğer bilet sahibi boşsa uyarı göster
+    if (!ticketOwner.trim()) {
+        alert("Bilet sahibi ismi boş olamaz!");
+        return;
+    }
+
+    // Bilet sahibini işle ve büyük İ'yi küçük i'ye çevir
+    const formattedOwner = ticketOwner.replace(/İ/g, 'I').replace(/ı/g, 'i').trim();
+
+    document.getElementById("ticketTitle").innerText = eventName;
+    document.getElementById("ticketDate").innerText = eventDate;
+    document.getElementById("ticketOwnerName").innerText = formattedOwner;
+    document.getElementById("ticketTcNo").innerText = document.getElementById("tcNo").value;
+    document.getElementById("ticketLocation").innerText = eventLocation;
+    document.getElementById("ticketTime").innerText = eventTime;
+
+    /// QR Kod için URL belirleme
+    const url = "https://www.trkesfetturizm.com/dogrulama.html";
+
+    var qrcodeContainer = document.getElementById("qrcode");
+    qrcodeContainer.innerHTML = ""; // Önceki QR'ı temizle
+    new QRCode(qrcodeContainer, {
+        text: url, // QR koda URL ekleniyor
+        width: 100,
+        height: 100,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Formu gizle, bileti göster
+    document.getElementById("formContainer").style.display = "none";
+    document.getElementById("ticketContainer").style.display = "block";
+}
+
+
+        function downloadTicket() {
+            html2canvas(document.getElementById("ticketContainer")).then(function(canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'bilet.png';
+                link.click();
+            });
+        }
+
+        function resetForm() {
+            document.getElementById("ticketForm").reset();
+            document.getElementById("formContainer").style.display = "block";
+            document.getElementById("ticketContainer").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
